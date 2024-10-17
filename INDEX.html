@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partage ta Position</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 32px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Partage ta Position avec moi !</h1>
+    <p>Clique sur le bouton ci-dessous pour partager ta localisation (avec ton consentement).</p>
+    <button onclick="getLocation()">Partager ma Position</button>
+
+    <p id="status"></p>
+
+    <script>
+        function getLocation() {
+            const status = document.getElementById('status');
+
+            // Vérifie si le navigateur supporte la géolocalisation
+            if ('geolocation' in navigator) {
+                status.textContent = 'Obtention de ta position...';
+
+                // Demande la position
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+
+                        // Affiche la position
+                        status.innerHTML = `Latitude : ${latitude} <br> Longitude : ${longitude}`;
+
+                        // Option : envoyer les données à un serveur
+                        const url = `https://example.com/save_location?lat=${latitude}&long=${longitude}`;
+                        fetch(url);
+                    },
+                    () => {
+                        status.textContent = 'Impossible de récupérer la position.';
+                    }
+                );
+            } else {
+                status.textContent = 'La géolocalisation n’est pas supportée par ton navigateur.';
+            }
+        }
+    </script>
+
+</body>
+</html>
